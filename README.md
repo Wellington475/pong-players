@@ -11,6 +11,15 @@ ___
 - [Express](https://expressjs.com/)
 - [Socket.io](https://socket.io/)
 
+### Quick Start
+
+If you have already installed [node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
+
+1. `` npm install ``
+2. `` npm start ``
+3. Open in your browser http://localhost:4242/
+
+
 ### LICENSE
 This project is licensed under the License (ISC).
 
