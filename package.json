@@ -1,0 +1,27 @@
+{
+  "name": "pong-players",
+  "version": "1.0.0",
+  "description": "Pong-players is a simple personal project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5).",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wellington475/pong-players.git"
+  },
+  "keywords": [
+    "html5",
+    "socket.io",
+    "express",
+    "canvas",
+    "game",
+    "pong"
+  ],
+  "author": "Wellington Eugenio dos Santos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wellington475/pong-players/issues"
+  },
+  "homepage": "https://github.com/Wellington475/pong-players#readme"
+}
