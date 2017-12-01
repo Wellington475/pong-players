@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/Wellington475/pong-players/issues"
   },
-  "homepage": "https://github.com/Wellington475/pong-players#readme"
+  "homepage": "https://github.com/Wellington475/pong-players#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
