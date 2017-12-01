@@ -4,6 +4,7 @@
   "description": "Pong-players is a simple personal project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5).",
   "main": "server.js",
   "scripts": {
+    "start" : "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
