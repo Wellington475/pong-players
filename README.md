@@ -1,4 +1,4 @@
-# Pong-players
+# Pong-Players
 
 ____
 
