@@ -6,3 +6,5 @@ const server = app.listen(3000, () => {
 
   console.log('\n\tListening at http://localhost:' + port+ '\n\n');
 });
+
+app.use(express.static('public'));
