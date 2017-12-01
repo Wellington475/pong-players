@@ -2,7 +2,7 @@
 
 ____
 
-Pong-players is a simple personal project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5).
+Pong-Players is a simple personal project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5).
 
 ___
 
