@@ -19,9 +19,9 @@ app.use(express.static('public'))
 const socket = require('socket.io')
 const io     = socket(server)
 
-const rooms = []
-const waiting_room = [];
-const connections = [];
+const rooms        = []
+const waiting_room = []
+const connections  = []
 
 const getCounter = () => {
   io.emit('getCounter', connections.length)
@@ -30,47 +30,56 @@ const getCounter = () => {
 
 
 const createRoom = (playerIdOne, playerIdTwo) => {
-  const roomId = rooms.length+1
-  rooms.push({id: roomId, player1: playerIdOne, player2: playerIdTwo})
-  return rooms.map(room => {
-      if(room.id == roomId){
-        io.emit('init', room);
+  rooms.push({player1: playerIdOne, player2: playerIdTwo})
 
-        console.log("\nRoom ["+room.id+"]:\n\n\t player1 [" + room.player1 + "] - player2 [" + room.player2 + "]\n")
+  let room = rooms[rooms.length - 1]
+  room.id  = rooms.length
 
-        return room
-      }
-    })
+  io.emit('init', room)
+
+  console.log("\nCreate: Room [" + room.id + "]\n\n\t player1 [" + room.player1 + "] - player2 [" + room.player2 + "]\n")
+
+  return room
 }
 
-io.on('connection', function(socket){
-  console.log("Connected: " + socket.id)
+const destroyRoom = (playerId) => {
+  const idx  = rooms.findIndex(room => room.player1 == playerId || room.player2 == playerId)
+  const room = rooms.splice(idx, 1)
+  console.log("Destroy: Room[" + (idx + 1) + "]\n")
+}
 
-  connections.push(socket)
-  waiting_room.push(socket.id)
-
+const waitingRoomToRooms = () => {
   if(waiting_room.length == 2){
     const [player1, player2] = [waiting_room.pop(), waiting_room.pop()]
-    const roomId = createRoom(player1, player2)
+    return createRoom(player1, player2)
   }
+  return null
+}
 
+const otherPlayerToWaitingRoom = (playerId) => {
+  rooms.filter(room => {
+      if(room.player1 == playerId) waiting_room.push(room.player2)
+      if(room.player2 == playerId) waiting_room.push(room.player1)
+  })
+}
+
+io.on('connection', function(socket) {
+  console.log("Connected: " + socket.id)
+  connections.push(socket)
   getCounter()
 
-  socket.on('disconnect',function(data){
-    connections.splice(connections.indexOf(socket), 1)
-    for(let i in rooms){
-      if(rooms[i].player1 == socket.id || rooms[i].player2 == socket.id){
-        waiting_room.push(rooms[i].player1 == socket.id ? rooms[i].player2 : rooms[i].player1)
-        rooms.splice(i, 1)
-      }
-    }
-    console.log("Disconnected: " + socket.id)
-    console.log("Rooms: " + rooms + "\n")
-    getCounter()
+  waiting_room.push(socket.id)
 
-    if(waiting_room.length == 2){
-      const [player1, player2] = [waiting_room.pop(), waiting_room.pop()]
-      const roomId = createRoom(player1, player2)
-    }
+  const room = waitingRoomToRooms()
+
+  socket.on('disconnect', function(data){
+    console.log("Disconnected: " + socket.id)
+    connections.splice(connections.indexOf(socket), 1)
+    getCounter()
+    
+    otherPlayerToWaitingRoom(socket.id)
+    destroyRoom(socket.id)
+
+    const room = waitingRoomToRooms()
   })
 })
