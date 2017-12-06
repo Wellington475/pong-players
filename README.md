@@ -16,8 +16,9 @@ ___
 If you have already installed [node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
 
 1. `` npm install ``
-2. `` npm start ``
-3. Open in your browser http://localhost:4242/
+2. `` npm run build ``
+3. `` npm start ``
+4. Open in your browser http://localhost:4242/
 
 
 ### LICENSE

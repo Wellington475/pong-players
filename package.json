@@ -4,9 +4,10 @@
   "description": "Pong-players is a simple personal project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5).",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run build\"",
-    "server": "node server.js",
-    "build": "gulp",
+    "start": "npm run server",
+    "dev" : "concurrently \"npm run server\" \"npm run build\"",
+    "server": "node ./src/server/server.js",
+    "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,7 +30,8 @@
   "homepage": "https://github.com/Wellington475/pong-players#readme",
   "dependencies": {
     "concurrently": "^3.5.1",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

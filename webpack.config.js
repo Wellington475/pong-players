@@ -2,7 +2,7 @@ const path    = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/client/app.js',
   output : {
     path: path.resolve(__dirname, './public/js'),
     filename: 'game.min.js'
