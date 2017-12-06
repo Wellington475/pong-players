@@ -159,11 +159,18 @@ body{
 }
 
 .info-wrapper .nick{
-  color: #09C;
-  font-size: 2.5em;
+  font-size: 2.2em;
   font-weight: bold;
   margin: 0px;
   margin-bottom: 5px;
+}
+
+.info-wrapper .nick.me{
+  color: #09C;
+}
+
+.info-wrapper .nick.opponent{
+  color: red;
 }
 
 .info-wrapper .score{
@@ -200,4 +207,27 @@ body{
 .record-text, .fa-star{
 
   color: yellow;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.warning h1 {
+  animation-name: anim;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes anim {
+  0%, 100%{
+    opacity: 1;
+  }
+  50%{
+    opacity: .2;
+  }
 }

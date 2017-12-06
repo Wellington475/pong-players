@@ -11,18 +11,25 @@
   <body>
     <div class="modal shadow">
       <div class="modal-container">
-        <h1>Pong-Players</h1>
-        <p>Is a simple project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5)</p>
-        <div class="form-control">
-          <input class="modal-input" type="text" placeholder="Enter your nick">
-          <input class="modal-btn" type="button" value="Enter">
+        <div class="default">
+          <h1>Pong-Players</h1>
+          <p>Is a simple project of a mutiplayer game using node javascript technologies (expressjs + socket.io + html5)</p>
+          <div class="form-control">
+            <input class="modal-input" type="text" placeholder="Enter your nick">
+            <input class="modal-btn" type="button" value="Enter">
+          </div>
+        </div>
+        <div class="warning hidden">
+          <h1 class="message">Waiting for opponent</h1>
         </div>
       </div>
     </div>
     <div class="wrapper">
       <div class="col-game">
           <div class="info-wrapper">
-            <p class="nick">Nick</p>
+            <p class="nick me">Nick</p>
+            <p class="vs">x</p>
+            <p class="nick opponent">Nick</p>
             <p>Your score:</p>
             <p class="score">0</p>
             <div class="life">

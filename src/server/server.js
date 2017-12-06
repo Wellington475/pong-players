@@ -1,3 +1,5 @@
+'use strict'
+
 /**
  * Server config
  */
@@ -16,8 +18,11 @@ app.use(express.static('public'))
 /**
  * Socket config
  */
+
 const socket = require('socket.io')
 const io     = socket(server)
+
+const Player = require('../game/entities/player')
 
 const rooms        = []
 const waiting_room = []
@@ -37,29 +42,36 @@ const createRoom = (playerIdOne, playerIdTwo) => {
 
   io.emit('init', room)
 
-  console.log("\nCreate: Room [" + room.id + "]\n\n\t player1 [" + room.player1 + "] - player2 [" + room.player2 + "]\n")
+  console.log("\nCreate: Room [" + room.id + "]\n\n\t player1 [" + room.player1.name + "] - player2 [" + room.player2.name + "]\n")
 
   return room
 }
 
 const destroyRoom = (playerId) => {
-  const idx  = rooms.findIndex(room => room.player1 == playerId || room.player2 == playerId)
+  const idx  = rooms.findIndex(room => room.player1.id == playerId || room.player2.id == playerId)
   const room = rooms.splice(idx, 1)
+
   console.log("Destroy: Room[" + (idx + 1) + "]\n")
+
+  return rooms
 }
 
 const waitingRoomToRooms = () => {
-  if(waiting_room.length == 2){
-    const [player1, player2] = [waiting_room.pop(), waiting_room.pop()]
-    return createRoom(player1, player2)
-  }
-  return null
+  const [player2, player1] = [waiting_room.pop(), waiting_room.pop()]
+  return createRoom(player1, player2)
 }
 
 const otherPlayerToWaitingRoom = (playerId) => {
-  rooms.filter(room => {
-      if(room.player1 == playerId) waiting_room.push(room.player2)
-      if(room.player2 == playerId) waiting_room.push(room.player1)
+  return rooms.filter(room => {
+      if(room.player1.id == playerId){
+        waiting_room.push(room.player2)
+        return room.player2
+      }
+
+      if(room.player2.id == playerId){
+        waiting_room.push(room.player1)
+        return room.player2
+      }
   })
 }
 
@@ -68,18 +80,30 @@ io.on('connection', function(socket) {
   connections.push(socket)
   getCounter()
 
-  waiting_room.push(socket.id)
+  socket.on('registerName', (name) => {
+    const player = new Player(socket.id, name)
 
-  const room = waitingRoomToRooms()
+    waiting_room.push(player)
+
+    if(waiting_room.length == 2){
+      const room = waitingRoomToRooms()
+    }
+  })
+
 
   socket.on('disconnect', function(data){
     console.log("Disconnected: " + socket.id)
     connections.splice(connections.indexOf(socket), 1)
     getCounter()
-    
+
     otherPlayerToWaitingRoom(socket.id)
     destroyRoom(socket.id)
 
-    const room = waitingRoomToRooms()
+    console.log(rooms)
+    console.log(waiting_room)
+
+    if(waiting_room.length == 2){
+      const room = waitingRoomToRooms()
+    }
   })
 })
