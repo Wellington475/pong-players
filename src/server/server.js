@@ -56,23 +56,34 @@ const destroyRoom = (playerId) => {
   return rooms
 }
 
+const removePlayerWaitingRoom = (playerId) => {
+  const hasPlayer = waiting_room.filter(player => player.id == playerId).length
+  if(hasPlayer > 0){
+    const idx  = waiting_room.findIndex(player => player.id == playerId)
+    waiting_room.splice(idx, 1)
+  }
+}
+
 const waitingRoomToRooms = () => {
   const [player2, player1] = [waiting_room.pop(), waiting_room.pop()]
   return createRoom(player1, player2)
 }
 
 const otherPlayerToWaitingRoom = (playerId) => {
-  return rooms.filter(room => {
+  let other = null
+  rooms.filter(room => {
       if(room.player1.id == playerId){
         waiting_room.push(room.player2)
-        return room.player2
+        other = room.player2
       }
 
       if(room.player2.id == playerId){
         waiting_room.push(room.player1)
-        return room.player2
+        other = room.player1
       }
   })
+
+  return other
 }
 
 io.on('connection', function(socket) {
@@ -90,20 +101,22 @@ io.on('connection', function(socket) {
     }
   })
 
-
   socket.on('disconnect', function(data){
     console.log("Disconnected: " + socket.id)
     connections.splice(connections.indexOf(socket), 1)
     getCounter()
 
-    otherPlayerToWaitingRoom(socket.id)
+    let other = otherPlayerToWaitingRoom(socket.id)
+    
+    if(other)
+      io.sockets.emit('gameEnd', other)
+
     destroyRoom(socket.id)
 
-    console.log(rooms)
-    console.log(waiting_room)
+    if(waiting_room.length == 1)
+      removePlayerWaitingRoom(socket.id)
 
-    if(waiting_room.length == 2){
-      const room = waitingRoomToRooms()
-    }
+    if(waiting_room.length == 2)
+      waitingRoomToRooms()
   })
 })
