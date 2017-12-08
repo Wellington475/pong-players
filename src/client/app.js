@@ -55,21 +55,37 @@ socket.on('init', (room) => {
     document.querySelector('.modal').classList.remove('active')
 
     if(socket.id == room.player1.id){
-      player   = room.player1
-      opponent = room.player2
+      let {player1, player2} = room
+      player   = new Player(player1.id, player1.name)
+      opponent = new Player(player2.id, player2.name)
 
-      document.querySelector('.me').innerText       = player.name
-      document.querySelector('.opponent').innerText = opponent.name
+      player.type   = 1
+      player.roomId = room.id
+
+      opponent.type   = 2
+      opponent.roomId = room.id
+
+      document.querySelector('.nick-one').innerHTML = '<p class="nick me">'       + player.name   + ' <sup class="score score-me">0</sup></p>'
+      document.querySelector('.nick-two').innerHTML = '<p class="nick opponent">' + opponent.name + ' <sup class="score score-me">0</sup></p>'
     }
     else{
-      player   = room.player1
-      opponent = room.player2
+      let {player1, player2} = room
+      player   = new Player(player2.id, player2.name)
+      opponent = new Player(player1.id, player1.name)
 
-      document.querySelector('.me').innerText       = player.name
-      document.querySelector('.opponent').innerText = opponent.name
+      player.type   = 2
+      player.roomId = room.id
+
+      opponent.type   = 1
+      opponent.roomId = room.id
+
+      document.querySelector('.nick-one').innerHTML = '<p class="nick opponent">' + opponent.name + ' <sup class="score score-me">0</sup></p>'
+      document.querySelector('.nick-two').innerHTML = '<p class="nick me">'       + player.name   + ' <sup class="score score-me">0</sup></p>'
     }
 
-    game = new Game(player, opponent, document.querySelector('#canvas'), window)
+    player.socket = socket
+
+    game = new Game(player, opponent, document.querySelector('#canvas'), document.querySelector('#canvas').getContext('2d'), window)
     game.setUp()
   }
 })

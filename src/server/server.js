@@ -28,6 +28,8 @@ const rooms        = []
 const waiting_room = []
 const connections  = []
 
+let opponent     = null
+
 const getCounter = () => {
   io.emit('getCounter', connections.length)
   console.log("Connections number: " + connections.length + "\n")
@@ -38,7 +40,7 @@ const createRoom = (playerIdOne, playerIdTwo) => {
   rooms.push({player1: playerIdOne, player2: playerIdTwo})
 
   let room = rooms[rooms.length - 1]
-  room.id  = rooms.length
+  room.id  = rooms.length-1
 
   io.emit('init', room)
 
@@ -51,7 +53,7 @@ const destroyRoom = (playerId) => {
   const idx  = rooms.findIndex(room => room.player1.id == playerId || room.player2.id == playerId)
   const room = rooms.splice(idx, 1)
 
-  console.log("Destroy: Room[" + (idx + 1) + "]\n")
+  console.log("Destroy: Room[" + idx + "]\n")
 
   return rooms
 }
@@ -86,7 +88,13 @@ const otherPlayerToWaitingRoom = (playerId) => {
   return other
 }
 
-io.on('connection', function(socket) {
+const updateOpponent = () => {
+  io.sockets.emit('opponent:update', opponent)
+}
+
+setInterval(updateOpponent, 1000/100)
+
+io.on('connection', (socket) => {
   console.log("Connected: " + socket.id)
   connections.push(socket)
   getCounter()
@@ -101,13 +109,17 @@ io.on('connection', function(socket) {
     }
   })
 
-  socket.on('disconnect', function(data){
+  socket.on('player:update', (data) => {
+      opponent = data
+  })
+
+  socket.on('disconnect', (data) => {
     console.log("Disconnected: " + socket.id)
     connections.splice(connections.indexOf(socket), 1)
     getCounter()
 
     let other = otherPlayerToWaitingRoom(socket.id)
-    
+
     if(other)
       io.sockets.emit('gameEnd', other)
 
