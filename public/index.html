@@ -27,18 +27,19 @@
     <div class="wrapper">
       <div class="col-game">
           <div class="info-wrapper">
-            <p class="nick me">Nick</p>
+            <div class="nick-one">
+              <p class="nick me">Nick <sup class="score score-me">0</sup></p>
+            </div>
             <p class="vs">x</p>
-            <p class="nick opponent">Nick</p>
-            <p>Your score:</p>
-            <p class="score">0</p>
+            <div class="nick-two">
+              <p class="nick opponent">Nick <sup class="score score-opponent">0</sup></p>
+            </div>
+            <p>Rounds:</p>
             <div class="life">
               <span><i class="fa fa-heart"></i></span>
               <span><i class="fa fa-heart"></i></span>
               <span><i class="fa fa-heart"></i></span>
             </div>
-            <p class="record-text"><i class="fa fa-star"></i> Record:</p>
-            <p class="record record-text">0</p>
           </div>
           <canvas id="canvas"></canvas>
       </div>
