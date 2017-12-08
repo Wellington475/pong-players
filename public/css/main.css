@@ -165,6 +165,10 @@ body{
   margin-bottom: 5px;
 }
 
+.info-wrapper .vs{
+  margin-left: -9%;
+}
+
 .info-wrapper .nick.me{
   color: #09C;
 }
@@ -175,9 +179,7 @@ body{
 
 .info-wrapper .score{
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 5em;
-  margin-top: -10%;
-  margin-bottom: 4%;
+  font-size: 0.5em;
 }
 
 .info-wrapper .record{
@@ -187,16 +189,14 @@ body{
 
 @media screen and (max-width: 700px) {
   .info-wrapper{
-    opacity: 0.8;
-    left: 2px;
-    top: 80px;
+    opacity: 0.5;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 150px;
     bottom: 0px;
   }
   .info-wrapper .nick{
     font-size: 1.8em;
-  }
-  .info-wrapper .score{
-    font-size: 3em;
   }
 }
 
